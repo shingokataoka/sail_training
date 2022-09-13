@@ -19,12 +19,14 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        $guards = empty($guards) ? [null] : $guards;
+        $prefix = \Get::routePrefix();
+        $home = \Get::home();
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
-            }
+        if (
+            $request->routeIs("{$prefix}.*")
+            && Auth::guard($prefix)->check()
+        ) {
+            return redirect($home);
         }
 
         return $next($request);
