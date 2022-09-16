@@ -6,10 +6,12 @@
             </a>
         </x-slot>
 
+        <h2 class="py-6 text-lg">オーナー新規作成</h2>
+
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('admin.register') }}">
+        <form method="POST" action="{{ route('admin.owners.store') }}">
             @csrf
 
             <!-- Name -->
@@ -45,14 +47,9 @@
                                 name="password_confirmation" required />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('admin.login') }}">
-                    {{ __('Already registered?') }}
-                </a>
-
-                <x-primary-button class="ml-4">
-                    {{ __('Register') }}
-                </x-primary-button>
+            <div class="flex items-center justify-around mt-4">
+                <x-form.button no="3" type="button" onclick="location.href='{{ route('admin.owners.index') }}'">戻る</x-form.button>
+                <x-form.button no="1">作成する</x-form.button>
             </div>
         </form>
     </x-auth-card>

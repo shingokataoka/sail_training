@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Owner;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Hash;
 
 class OwnersController extends Controller
 {
@@ -27,7 +29,7 @@ class OwnersController extends Controller
      */
     public function create()
     {
-        dd('create');
+        return view('admin.owners.create');
     }
 
     /**
@@ -38,8 +40,21 @@ class OwnersController extends Controller
      */
     public function store(Request $request)
     {
-        dd('    public function store(Request $request)
-        ');
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:owners'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        Owner::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        session()->flash('status', 'info');
+        session()->flash('message', 'オーナーを登録しました。');
+        return to_route('admin.owners.index');
     }
 
     /**
@@ -61,7 +76,8 @@ class OwnersController extends Controller
      */
     public function edit($id)
     {
-        dd('edit');
+        $owner = Owner::findOrFail($id);
+        return view('admin.owners.edit', compact('owner'));
     }
 
     /**
@@ -73,7 +89,21 @@ class OwnersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd('update');
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:owners,email,'. $id .',id'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $owner = Owner::FindOrFail($id);
+        $owner->name = $request->name;
+        $owner->email = $request->email;
+        $owner->password = Hash::make($request->password);
+        $owner->save();
+
+        session()->flash('status', 'info');
+        session()->flash('message', 'オーナー情報を更新しました。');
+        return to_route('admin.owners.index');
     }
 
     /**
@@ -84,6 +114,25 @@ class OwnersController extends Controller
      */
     public function destroy($id)
     {
-        dd('destroy');
+        Owner::FindOrFail($id)->delete();
+
+        session()->flash('status', 'alert');
+        session()->flash('message', 'オーナーを削除しました。');
+        return to_route('admin.owners.index');
+    }
+
+    public function expiredOwnerIndex()
+    {
+        $owners = Owner::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate(3);
+        return view('admin.expired-owners', compact('owners'));
+    }
+
+    public function expiredOwnerDestroy($id)
+    {
+        Owner::onlyTrashed()->FindOrFail($id)->forceDelete();
+
+        session()->flash('status', 'alert');
+        session()->flash('message', 'オーナーを完全に削除しました。');
+        return to_route('admin.expired-owners.index');
     }
 }
