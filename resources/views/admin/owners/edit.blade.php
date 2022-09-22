@@ -28,6 +28,12 @@
                 <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $owner->email)" required />
             </div>
 
+            <div class="mt-4">
+                <label for="shop_name">店名</label>
+
+                <x-form.input id="shop_name" name="shop_name" value="{{ $owner->shop->owner_id . $owner->shop->name }}" disabled class="bg-gray-600 border-0 block mt-1 w-full" type="text" />
+            </div>
+
             <!-- Password -->
             <div class="mt-4">
                 <x-input-label for="password" :value="__('Password')" />

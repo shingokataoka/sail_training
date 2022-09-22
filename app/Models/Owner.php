@@ -49,4 +49,13 @@ class Owner extends Authenticatable
         $this->notify(new ResetPasswordNotification($token));
     }
 
+    public function shop()
+    {
+        return $this->hasOne(Shop::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
 }

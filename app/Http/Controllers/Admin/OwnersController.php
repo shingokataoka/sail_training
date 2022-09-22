@@ -9,6 +9,9 @@ use App\Models\Owner;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
 
+use App\Models\Shop;
+use Illuminate\Support\Facades\DB;
+
 class OwnersController extends Controller
 {
     /**
@@ -46,11 +49,25 @@ class OwnersController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        Owner::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+                DB::transaction(function() use ($request){
+                    $owner = Owner::create([
+                        'name' => $request->name,
+                        'email' => $request->email,
+                        'password' => Hash::make($request->password),
+                    ]);
+                    Shop::create([
+                        'owner_id' => $owner->id,
+                        'name' => 'ここに店名が入ります。',
+                        'information' => 'ここに店舗情報が入ります。\n aa',
+                        'filename' => '',
+                        'is_selling' => true,
+                    ]);
+                });
+            } catch(throwable $e) {
+            Log::error($e);
+            throw $e;
+        }
 
         session()->flash('status', 'info');
         session()->flash('message', 'オーナーを登録しました。');

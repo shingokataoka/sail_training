@@ -10,6 +10,8 @@ use App\Http\Controllers\Owner\Auth\RegisteredUserController;
 use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Owner\ShopsController;
+use App\Http\Controllers\Owner\ImagesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +30,15 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('owner.dashboard');
 })->middleware(['auth:owner'])->name('dashboard');
+
+
+Route::prefix('shops')->middleware('auth:owner')->controller(ShopsController::class)->group(function() {
+    Route::get('/', 'index')->name('shops.index');
+    Route::get('{shop}/edit', 'edit')->name('shops.edit');
+    Route::patch('{shop}/update', 'update')->name('shops.update');
+});
+
+Route::resource('images', ImagesController::class);
 
 
 
