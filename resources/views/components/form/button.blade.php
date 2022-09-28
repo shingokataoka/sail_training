@@ -10,4 +10,4 @@
 @endphp
 
 
-<button {{ $attributes }} class="text-white  border-0 py-2 focus:outline-none  rounded {{ $bgColor }} {{ $px }}">{{ $slot }}</button>
+<button {{ $attributes->merge(['class' => "text-white  border-0 py-2 focus:outline-none  rounded {$bgColor} {$px}"]) }}>{{ $slot }}</button>
