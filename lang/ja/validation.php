@@ -150,5 +150,10 @@ return [
         'email' => 'メールアドレス',
         'password' => 'パスワード',
         'quantity' => '数量',
+
+        "information" => "情報",
+        "price" => "価格",
+        "shop" => "店舗",
+        "category" => "カテゴリ",
     ],
 ];
