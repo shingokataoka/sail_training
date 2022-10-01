@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Owner\ShopsController;
 use App\Http\Controllers\Owner\ImagesController;
+use App\Http\Controllers\Owner\ProductsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,9 +24,9 @@ use App\Http\Controllers\Owner\ImagesController;
 |
 */
 
-Route::get('/', function () {
-    return view('owner.welcome');
-})->name('index');
+// Route::get('/', function () {
+//     return view('owner.welcome');
+// })->name('index');
 
 Route::get('/dashboard', function () {
     return view('owner.dashboard');
@@ -40,13 +41,15 @@ Route::prefix('shops')->middleware('auth:owner')->controller(ShopsController::cl
 
 Route::resource('images', ImagesController::class);
 
+Route::resource('products', ProductsController::class)
+    ->middleware('auth:owner')->except('show');
 
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-                ->name('register');
+    // Route::get('register', [RegisteredUserController::class, 'create'])
+    //             ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    // Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');

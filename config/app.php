@@ -212,6 +212,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Get' => App\Lib\Get::class,
         'InterventionImage' => Intervention\Image\Facades\Image::class,
+        'Constant' => App\Constants\Common::class,
     ])->toArray(),
 
 ];

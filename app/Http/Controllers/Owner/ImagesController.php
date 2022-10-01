@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
 use App\Providers\ImageService;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ImagesController extends Controller
 {
@@ -134,6 +135,11 @@ class ImagesController extends Controller
         $image = Image::findOrFail($id);
         $path = 'public/products/' . $image->filename;
         if (Storage::exists($path)) Storage::delete($path);
+
+        DB::table('products')->where('image1_id', $image->id)->update(['image1_id' => null]);
+        DB::table('products')->where('image2_id', $image->id)->update(['image2_id' => null]);
+        DB::table('products')->where('image3_id', $image->id)->update(['image3_id' => null]);
+        DB::table('products')->where('image4_id', $image->id)->update(['image4_id' => null]);
 
         $image->delete();
 
