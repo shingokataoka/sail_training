@@ -38,7 +38,7 @@ class ProductsController extends Controller
     {
         $shopIds = Shop::where('owner_id', Auth::id())->pluck('id')->toArray();
         $products = Product::whereIn('shop_id', $shopIds)
-            ->orderBy('sort_order')->get();
+            ->orderBy('sort_order')->paginate('20');
 
             return view('owner.products.index', compact('products'));
     }
