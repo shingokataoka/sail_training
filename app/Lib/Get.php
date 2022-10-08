@@ -18,7 +18,7 @@ class Get
         $prefix = Request::route()->getPrefix();
         if (strpos($prefix, 'admin') === 0) return 'admin';
         if (strpos($prefix, 'owner')  === 0) return 'owner';
-        if ($prefix === '/') return 'user';
+        else return 'user';
     }
 
 }

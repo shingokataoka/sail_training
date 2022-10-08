@@ -28,6 +28,7 @@ class ProductFactory extends Factory
             'image2_id' => fake()->numberBetween(1, 6),
             'image3_id' => fake()->numberBetween(1, 6),
             'image4_id' => fake()->numberBetween(1, 6),
+            'created_at' => fake()->datetime(),
         ];
     }
 }
