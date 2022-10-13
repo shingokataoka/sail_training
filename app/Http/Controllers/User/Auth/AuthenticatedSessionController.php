@@ -49,6 +49,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('user.index');
+        return redirect()->route('user.items.index');
     }
 }

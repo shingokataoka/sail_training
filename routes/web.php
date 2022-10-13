@@ -10,6 +10,9 @@ use App\Http\Controllers\User\Auth\RegisteredUserController;
 use App\Http\Controllers\User\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\User\ItemsController;
+use App\Http\Controllers\User\CartController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,14 +24,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('user.welcome');
-})->name('index');
+// Route::get('/', function () {
+//     return view('user.welcome');
+// })->name('index');
 
-Route::get('/dashboard', function () {
-    return view('user.dashboard');
-})->middleware(['auth:user'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('user.dashboard');
+// })->middleware(['auth:user'])->name('dashboard');
 
+
+Route::middleware('auth:user')->controller(ItemsController::class)->group(function() {
+    Route::get('/', 'index')->name('items.index');
+    Route::get('/{item}/show', 'show')->where('item', '[0-9]+')->name('items.show');
+});
+Route::prefix('cart')->middleware('auth:user')->controller(CartController::class)->group(function() {
+    Route::get('/', 'index')->name('cart.index');
+    Route::post('/add', 'add')->name('cart.add');
+    Route::delete('{item}/destroy', 'destroy')->where('item', '[0-9]+')->name('cart.destroy');
+
+    Route::post('/checkout', 'checkout')->name('cart.checkout');
+    Route::get('/success', 'success')->name('cart.success');
+    Route::get('/cancel', 'cancel')->name('cart.cancel');
+
+});
 
 
 Route::middleware('guest')->group(function () {

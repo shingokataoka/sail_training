@@ -48,4 +48,10 @@ class User extends Authenticatable
         $this->notify(new ResetPasswordNotification($token));
     }
 
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'carts', 'user_id', 'product_id')
+            ->withPivot('id', 'quantity');
+    }
 }
