@@ -11,6 +11,11 @@ use App\Models\User;
 use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
 
+use App\Services\CartService;
+use App\Jobs\ThanksMailJob;
+use App\Jobs\OrderedMailJob;
+
+
 class CartController extends Controller
 {
     public function index()
@@ -58,7 +63,7 @@ class CartController extends Controller
 
     public function checkout()
     {
-        $products = User::findOrFail(Auth::id())->products;
+        $products = User::with('products.shop.owner')->findOrFail(Auth::id())->products;
 
         // カートが空ならフラッシュ付けて戻す
         if (empty($products)) {
@@ -113,7 +118,8 @@ class CartController extends Controller
 
     public function success()
     {
-        $products = User::findOrFail(Auth::id())->products;
+        $products = User::with('products.shop.owner')->findOrFail(Auth::id())->products;
+
         // Stockからカートぶんの数量をマイナスで加える
         foreach ($products as $product) {
             Stock::create([
@@ -124,6 +130,16 @@ class CartController extends Controller
         }
         // カートを空にする
         Cart::where('user_id', Auth::id())->delete();
+
+        $user = User::findOrFail(Auth::id());
+        // ユーザーへ購入完了メール
+        $items = CartService::getItemsInCart($products);
+        ThanksMailJob::dispatch($user, $items);
+
+        // オーナーへ購入された商品、ユーザー通知メール
+        foreach ($items as $item) {
+            OrderedMailJob::dispatch($user, $item);
+        }
 
         session()->flash('status', 'info');
         session()->flash('message', '商品の購入が完了しました。');

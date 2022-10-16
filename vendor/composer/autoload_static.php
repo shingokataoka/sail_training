@@ -569,6 +569,7 @@ class ComposerStaticInita9af3dcd62d114ecf37f940af690eef4
         'App\\Http\\Requests\\uploadImageRequest' => __DIR__ . '/../..' . '/app/Http/Requests/uploadImageRequest.php',
         'App\\Lib\\Get' => __DIR__ . '/../..' . '/app/Lib/Get.php',
         'App\\Lib\\ResetPassword' => __DIR__ . '/../..' . '/app/Lib/ResetPassword.php',
+        'App\\Mail\\ThanksMail' => __DIR__ . '/../..' . '/app/Mail/ThanksMail.php',
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
         'App\\Models\\Cart' => __DIR__ . '/../..' . '/app/Models/Cart.php',
         'App\\Models\\Image' => __DIR__ . '/../..' . '/app/Models/Image.php',

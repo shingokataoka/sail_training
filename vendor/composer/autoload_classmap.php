@@ -55,6 +55,7 @@ return array(
     'App\\Http\\Requests\\uploadImageRequest' => $baseDir . '/app/Http/Requests/uploadImageRequest.php',
     'App\\Lib\\Get' => $baseDir . '/app/Lib/Get.php',
     'App\\Lib\\ResetPassword' => $baseDir . '/app/Lib/ResetPassword.php',
+    'App\\Mail\\ThanksMail' => $baseDir . '/app/Mail/ThanksMail.php',
     'App\\Models\\Admin' => $baseDir . '/app/Models/Admin.php',
     'App\\Models\\Cart' => $baseDir . '/app/Models/Cart.php',
     'App\\Models\\Image' => $baseDir . '/app/Models/Image.php',
